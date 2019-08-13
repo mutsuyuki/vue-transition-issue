@@ -1,0 +1,105 @@
+<html>
+<head>
+    <style>
+        /* navi style */
+        .router-link-active {
+            font-weight: bold;
+        }
+        
+        /* page style */
+        .page {
+            position:absolute;
+            width:70%;
+            padding:16px;
+        }
+        .page--first {
+            background-color: tomato;
+        }
+        .page--second {
+            background-color: gold;
+        }
+
+        /* animation */
+        .first-enter, .first-leave-to {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+        .first-enter-active, .first-leave-active {
+            transition: all 1s ease;
+        }
+        .second-enter, .second-leave-to {
+            opacity: 0;
+            transform: translateY(+50px);
+        }
+        .second-enter-active, .second-leave-active {
+            transition: all 1s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <h2>Incorrect transition with vue v2.6.9</h2>
+        <p>leave animation is work correctly, but enter animation is not work.</p>
+        <nav>
+            <router-link to="/first-page">firtst</router-link>
+            | 
+            <router-link to="/second-page">second</router-link>
+        </nav>  
+        <router-view></router-view>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.9/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.3/vue-router.min.js"></script>
+    <script>
+        var firstPage = Vue.component('first-page',{
+            template: `
+            <transition name="first">
+                <div class="page page--first">
+                1st page<br> 
+                1st page<br> 
+                1st page<br> 
+                </div>
+            </transition>`
+        });
+
+        var secondPage =  Vue.component('second-page',{
+            template: `  
+            <transition name="second">
+                <div class="page page--second">
+                2nd page<br> 
+                2nd page<br> 
+                2nd page<br> 
+                </div>
+            </transition>`
+        });
+
+        var routes = [
+            {
+                path: "/",
+                redirect:"/first-page"
+            },
+            {
+                path: "/first-page",
+                component: firstPage,
+                name: "firstPage"
+            },
+            {
+                path: "/second-page",
+                component: secondPage,
+                name: "secondPage"
+            }
+        ];
+
+        var router = new VueRouter({
+            routes: routes
+        });
+
+        var app = new Vue({
+            el: "#app",
+            router: router,
+        });
+
+    </script>
+</body>
+</html>
